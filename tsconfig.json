@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "micro-services": [
+        "dist/micro-services"
+      ],
+      "micro-services/*": [
+        "dist/micro-services/*"
+      ]
+    }
   }
 }

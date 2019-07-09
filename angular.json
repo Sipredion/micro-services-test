@@ -2,5 +2,178 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "micro-services": {
+      "root": "projects/micro-services",
+      "sourceRoot": "projects/micro-services/src",
+      "projectType": "library",
+      "prefix": "mbl",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/micro-services/tsconfig.lib.json",
+            "project": "projects/micro-services/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/micro-services/src/test.ts",
+            "tsConfig": "projects/micro-services/tsconfig.spec.json",
+            "karmaConfig": "projects/micro-services/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/micro-services/tsconfig.lib.json",
+              "projects/micro-services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "micro-services-demo": {
+      "root": "projects/micro-services-demo/",
+      "sourceRoot": "projects/micro-services-demo/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/micro-services-demo",
+            "index": "projects/micro-services-demo/src/index.html",
+            "main": "projects/micro-services-demo/src/main.ts",
+            "polyfills": "projects/micro-services-demo/src/polyfills.ts",
+            "tsConfig": "projects/micro-services-demo/tsconfig.app.json",
+            "assets": [
+              "projects/micro-services-demo/src/favicon.ico",
+              "projects/micro-services-demo/src/assets"
+            ],
+            "styles": [
+              "projects/micro-services-demo/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/micro-services-demo/src/environments/environment.ts",
+                  "with": "projects/micro-services-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "micro-services-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "micro-services-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "micro-services-demo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/micro-services-demo/src/test.ts",
+            "polyfills": "projects/micro-services-demo/src/polyfills.ts",
+            "tsConfig": "projects/micro-services-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/micro-services-demo/karma.conf.js",
+            "styles": [
+              "projects/micro-services-demo/src/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/micro-services-demo/src/favicon.ico",
+              "projects/micro-services-demo/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/micro-services-demo/tsconfig.app.json",
+              "projects/micro-services-demo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "micro-services-demo-e2e": {
+      "root": "projects/micro-services-demo-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/micro-services-demo-e2e/protractor.conf.js",
+            "devServerTarget": "micro-services-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "micro-services-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/micro-services-demo-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "micro-services"
 }
